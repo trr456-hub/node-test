@@ -9,13 +9,15 @@ export default function TestCase() {
     const [pwd, setPwd] = useState('');
     const [gender, setGender] = useState('');
 
+    const [userInfo, setUserInfo] = useState([]);
+
     const handleSubmit = async (e) => {
         e.preventDefault(); // 페이지 리로드 방지
         const post = { title, content };
 
         // 데이터를 백엔드로 전송
         try {
-            const response = await axios.post('http://localhost:4000/posts', post);
+            const response = await axios.post('/posts', post);
             console.log('Post created successfully:', response.data);
             // 입력 필드 초기화
             setTitle('');
@@ -32,7 +34,7 @@ export default function TestCase() {
         const post = { id, pwd, gender };
 
         try {
-            const response = await axios.post('http://localhost:4000/user', post);
+            const response = await axios.post('/user', post);
             console.log('Post created successfully:', response.data);
             // 입력 필드 초기화
             setId('');
@@ -41,6 +43,14 @@ export default function TestCase() {
             console.error('There was an error creating the post:', error);
         }
     };
+
+    const getUser = async () => {
+        await axios.get('/user').then((response) => {
+            setUserInfo(response.data);
+        });
+    };
+    console.log('userInfo : ', userInfo);
+
     // const getData = () => {
     //     axios.get('http://localhost:4000/posts').then(function (response) {
     //         console.log(response.data);
@@ -75,6 +85,17 @@ export default function TestCase() {
                     <button type="submit">전송</button>
                 </div>
             </form>
+            <button onClick={getUser}>getuser</button>
+            <div>
+                {userInfo.map((v) => (
+                    <div key={v.id}>
+                        <span>{v.id}</span>
+                        <span>{v.user_id}</span>
+                        <span>{v.pwd}</span>
+                        <span>{v.gender}</span>
+                    </div>
+                ))}
+            </div>
         </>
     );
 }

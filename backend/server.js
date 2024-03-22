@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 4000;
 
@@ -12,11 +13,10 @@ const pool = new Pool({
     port: 5432,
 });
 
-const cors = require('cors');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -91,6 +91,15 @@ app.post('/user', async (req, res) => {
         res.status(500).send('Server Error');
     } finally {
         client.release();
+    }
+});
+app.get('/user', async (req, res) => {
+    const client = await pool.connect();
+    try {
+        const result = await client.query('SELECT * FROM "user"');
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
     }
 });
 // app.post('/text', (req, res) => {
