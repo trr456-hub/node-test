@@ -20,6 +20,21 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
+// const createTable = async () => {
+//     const queryText = `CREATE TABLE IF NOT EXISTS user_table (
+//         id SERIAL PRIMARY KEY,
+//         user_id VARCHAR(255) UNIQUE NOT NULL,
+//         password VARCHAR(255) NOT NULL,
+//         gender CHAR(1) CHECK (gender IN ('M','F','O'))
+//     )`;
+//     try {
+//         await pool.query(queryText);
+//         console.log('query 정상 생성');
+//     } catch (err) {
+//         console.error(err);
+//     }
+// };
+// createTable();
 // pool.connect();
 
 // pool.query('SELECT NOW()', (err, res) => {
@@ -53,6 +68,24 @@ app.get('/posts', async (req, res) => {
     try {
         const result = await client.query('SELECT * FROM posts');
         res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    } finally {
+        client.release();
+    }
+});
+// 회원가입
+app.post('/user', async (req, res) => {
+    const { id, pwd, gender } = req.body;
+    const client = await pool.connect();
+    try {
+        const result = await client.query('INSERT INTO "user"(user_id, pwd, gender) VALUES($1, $2, $3) RETURNING *', [
+            id,
+            pwd,
+            gender,
+        ]);
+        res.json(result.rows[0]);
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
