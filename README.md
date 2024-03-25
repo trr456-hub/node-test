@@ -42,4 +42,4 @@ hook을 사용해서 서버에 post요청을 넣어주면 들어온 state를 가
 IF NOT EXISTS === 테이블이 이미있다면 오류를 반환하도록하는 구문
 
 INSERT INTO user(user_id, pwd, gender) VALUES($1, $2, $3) RETURNING \*
-이 쿼리문에서 user 테이블을 조회할때 "user"는 예약어라 컬럼 이름으로 사용할때는 꼭 따옴표로 묶어줘야댐 그래야 예약어로 인식되는걸 방지할 수 있음
+이 쿼리문에서 user 테이블을 조회할때 "user"는 예약어라 컬럼 이름으로 사용할때는 꼭 따옴표로 묶어줘야댐 그래야 예약어로 인식되는걸 방지할 수 있음aaa
