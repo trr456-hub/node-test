@@ -1,9 +1,9 @@
-import TEST from './testCase';
+import Router from './Router';
 
 function App() {
     return (
         <div>
-            <TEST />
+            <Router />
         </div>
     );
 }
