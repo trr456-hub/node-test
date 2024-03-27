@@ -39,6 +39,31 @@ app.post('/insert', async (req, res) => {
         console.error(error);
     }
 });
+
+app.get('/select', async (req, res) => {
+    const result = await client.query('SELECT * FROM board_list');
+    try {
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+app.post('/del', async (req, res) => {
+    const { id } = req.body;
+    // console.log(id);
+    try {
+        const result = await client.query('DELETE FROM board_list WHERE id = $1 RETURNING * ', [id]);
+        if (result.rowCount > 0) {
+            res.json({ success: true, deleteRow: result.rows[0] });
+        } else {
+            res.status(404).json({ success: false, message: 'No rows found to delete.' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: 'An error occurred.' });
+    }
+});
 // client.query(
 //     `
 //     CREATE TABLE board_list (

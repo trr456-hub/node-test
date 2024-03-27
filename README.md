@@ -43,3 +43,5 @@ IF NOT EXISTS === 테이블이 이미있다면 오류를 반환하도록하는 �
 
 INSERT INTO user(user_id, pwd, gender) VALUES($1, $2, $3) RETURNING \*
 이 쿼리문에서 user 테이블을 조회할때 "user"는 예약어라 컬럼 이름으로 사용할때는 꼭 따옴표로 묶어줘야댐 그래야 예약어로 인식되는걸 방지할 수 있음aaa
+
+클라 => 서버 파라미터를 전달후 req.body로 받을때에는 default가 JSON이기 때문에 object형태로 전달 해야 한다.
