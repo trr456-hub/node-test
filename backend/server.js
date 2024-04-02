@@ -64,6 +64,27 @@ app.post('/del', async (req, res) => {
         res.status(500).json({ success: false, message: 'An error occurred.' });
     }
 });
+
+app.post('/update', async (req, res) => {
+    const { text, user_name, text_title, id } = req.body;
+    // console.log(text, text_title, user_name, id);
+    try {
+        const query = `
+        UPDATE board_list
+        SET user_name = $1, text = $2, text_title = $3
+        WHERE id = $4
+        `;
+        const values = [user_name, text, text_title, id];
+        const result = await client.query(query, values);
+        if (result.rowCount > 0) {
+            res.send('update success');
+        } else {
+            res.send('data none');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
 // client.query(
 //     `
 //     CREATE TABLE board_list (
